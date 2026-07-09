@@ -56,6 +56,13 @@ To understand the full project, read these in order:
 - **Build status**: TypeScript 0 errors, ESLint 0 errors (1 pre-existing warning in seed.ts)
 - **State changes**: Moved checkout success, payment, order tracking, about, coupon validate from "Not Yet Built" to "Built & Ready"
 
+### Session 2026-07-09 — Render Deployment Setup
+- **Created**: `render.yaml` — Blueprint with Web Service + PostgreSQL DB, env vars, health check
+- **Created**: Prisma migration — `prisma/migrations/20260709000000_init/migration.sql` (full 33-table schema)
+- **Created**: `prisma/migrations/migration_lock.toml` — Postgres provider lock
+- **Created**: `prisma/migrations/20260709000000_init/migration.json` — Migration metadata
+- **Build status**: TypeScript 0 errors, ESLint 0 errors (1 pre-existing warning in seed.ts)
+
 ---
 
 ## 3. Project State Tracker
