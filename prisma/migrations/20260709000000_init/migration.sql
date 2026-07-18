@@ -1,4 +1,4 @@
-﻿-- CreateTable
+-- CreateTable
 CREATE TABLE "Admin" (
     "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
@@ -765,6 +765,7 @@ CREATE TABLE "Banner" (
     "mobile_image_id" TEXT,
     "link_url" TEXT,
     "link_text" TEXT,
+    "image_url" TEXT,
     "position" TEXT NOT NULL DEFAULT 'hero',
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "sort_order" INTEGER NOT NULL DEFAULT 0,

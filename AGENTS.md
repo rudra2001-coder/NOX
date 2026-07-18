@@ -97,6 +97,27 @@ To understand the full project, read these in order:
 - **Created**: `prisma/migrations/20260709000000_init/migration.json` — Migration metadata
 - **Build status**: TypeScript 0 errors, ESLint 0 errors (1 pre-existing warning in seed.ts)
 
+### Session 2026-07-18 — Full Dockerization (PostgreSQL 18)
+- **Created**: `.dockerignore` — Comprehensive ignore rules (node_modules, .next, .env, docs, etc.)
+- **Created**: `scripts/docker-entrypoint.sh` — Migration runner script (`prisma migrate deploy`)
+- **Created**: `render.yaml` — Render blueprint with PostgreSQL 18, health check, auto-generated JWT secret
+- **Updated**: `next.config.ts` — Added `output: "standalone"` for Docker production mode
+- **Updated**: `Dockerfile` — Added `migration-runner` stage (full node_modules + prisma CLI) alongside `runner` stage (Next.js standalone)
+- **Updated**: `docker-compose.yml` — PostgreSQL 18-alpine + Redis 7 + init `migrate` service (runs before app) + dedicated network + Redis volume
+- **Architecture**: `migrate` service depends on healthy postgres, runs `prisma migrate deploy`, then exits; `app` service waits for `migrate` completion before starting
+- **Build status**: TypeScript 0 errors, ESLint 0 errors (5 pre-existing warnings)
+- **State changes**: —
+
+### Session 2026-07-18 — Docker Bugfix + Auth Verification
+- **Fixed**: Removed `serverExternalPackages: ["@prisma/client"]` from `next.config.ts` — Turbopack was creating hashed external require names (e.g. `@prisma/client-2c3a283f134fdcb6`) for packages that didn't exist on disk. Without it, Turbopack bundles bcryptjs/jsonwebtoken and only @prisma/client remains external (which the Dockerfile manually copies to the hashed path).
+- **Verified**: `POST /api/admin/auth` works correctly inside Docker. The earlier "Authentication failed" error was caused by Windows `curl.exe` sending corrupted JSON body (PowerShell encoding artifact). Confirmed via:
+  - `Invoke-RestMethod` from Windows → 200 OK with valid token
+  - Node.js `http.request` inside container → 200 OK
+  - Direct bundled module invocation → 200 OK
+- **Key finding**: All API routes (auth, orders, health, products) work in standalone Docker mode.
+- **Build status**: TypeScript 0 errors, ESLint 0 errors (5 pre-existing warnings)
+- **State changes**: —
+
 ---
 
 ## 3. Project State Tracker
